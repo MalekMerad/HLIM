@@ -16,6 +16,8 @@ function Home() {
     { name: "Owner 1", location: "Alger", price: '100.000,00', size: { length: '190m', wide: '200m' }, image: Propertie },
     { name: "Owner 2", location: "Biskra", price: '200.000,00', size: { length: '90m', wide: '1200m' }, image: Propertie },
     { name: "Owner 3", location: "Alger", price: '1.900.000,00', size: { length: '1900m', wide: '2000m' }, image: Propertie },
+    { name: "Owner 3", location: "Alger", price: '1.900.000,00', size: { length: '1900m', wide: '2000m' }, image: Propertie },
+    { name: "Owner 3", location: "Alger", price: '1.900.000,00', size: { length: '1900m', wide: '2000m' }, image: Propertie },
   ];
 
   return (
