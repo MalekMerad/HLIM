@@ -14,6 +14,8 @@ import Register from './pages/Register';
 import Browse from './pages/Browse'
 import Product from './pages/Product';
 import LangSelector from './component/LangSelector';
+import Profile from './pages/Profile';
+import NotFoundPage from './pages/NotFoundPage';
 
 
 
@@ -55,6 +57,14 @@ const router = createBrowserRouter([
   {
       path : '/register',
       element : <Register/>
+  },
+  {
+    path : '/profile',
+    element : <Profile/>
+  },
+  {
+    path: '*',
+    element : <NotFoundPage/>
   },
 ])
 

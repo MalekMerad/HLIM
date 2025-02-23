@@ -98,3 +98,50 @@
   }
 }
 
+.profileImg-container img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid darkorchid;
+  margin-top: 5px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.profileImg-container img:hover {
+  transform: scale(1.05);
+}
+
+.registred-container {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.creat-container {
+  border-radius: 10px;
+  border: 2px solid darkorchid;
+  background: white;
+  padding: 7px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease-in-out;
+}
+
+.creat-container svg {
+  font-size: 16px;
+  color: #007bff;
+  transition: color 0.3s ease-in-out;
+}
+
+.creat-container:hover {
+  background-color: #007bff;
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.creat-container:hover svg {
+  color: white;
+}
