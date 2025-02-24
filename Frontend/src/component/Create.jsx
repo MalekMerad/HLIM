@@ -4,6 +4,7 @@ import '../styles/Create.scss';
 function Create() {
   const [step, setStep] = useState(0);
   const [images, setImages] = useState([]);
+  const [hoveredStep, setHoveredStep] = useState(null);
 
   const handleSubmit = () => {
     if (step < 3) {
@@ -23,13 +24,18 @@ function Create() {
       <h1>Create New Post</h1>
       <div className='progress-bar'>
         <div className='progress-line'>
-          <div className='filled' style={{ width: `${(step / 2) * 100}%` }}></div>
+          <div className='filled' style={{ width: `${(step / 3) * 100}%` }}></div>
         </div>
-        {[1, 2, 3].map((num, index) => (
-          <div key={index} className={`step-circle ${step >= index ? 'active' : ''}`}>
+        {[1, 2, 3, 4].map((num, index) => (
+          <div 
+            key={index} 
+            className={`step-circle ${step >= index ? 'active' : ''}`} 
+            onMouseEnter={() => setHoveredStep(index)}
+            onMouseLeave={() => setHoveredStep(null)}
+          >
             {num}
-            {step === index && (
-              <div className='tooltip'>Step {num}: {['Owner Info', 'Property Info', 'Upload Images'][index]}</div>
+            {hoveredStep === index && (
+              <div className='tooltip'>Step {num}: {['Owner Info', 'Property Info', 'Upload Images', 'Submit'][index]}</div>
             )}
           </div>
         ))}
@@ -61,8 +67,8 @@ function Create() {
 
         {step === 2 && (
           <div className='image-upload'>
-            <h1>Upload Images</h1>
-            <input type='file' accept='image/*' multiple onChange={handleImageUpload} />
+             <label htmlFor="file-input">Click to upload images</label>
+             <input id="file-input" type='file' accept='image/*' multiple onChange={handleImageUpload} />
             <p>{images.length} / 4 images uploaded</p>
             <div className='image-preview'>
               {images.map((img, index) => (

@@ -13,7 +13,7 @@ function Navbar() {
   const navigate = useNavigate();
   const {t} = useTranslation();
 
-  const [registred, setIsRegistred] = useState(true);
+  const [registred, setIsRegistred] = useState(false);
 
   return (
     <nav className='navbar-container'>
@@ -38,8 +38,8 @@ function Navbar() {
           <div className='profileImg-container'>
               <img src={ProfileImage} alt =  'profile'/>
           </div>
-          <div className='creat-container'>
-          <FontAwesomeIcon icon={faPlus} />
+          <div className='creat-container' onClick={() => navigate('/Create')}>
+            <FontAwesomeIcon icon={faPlus} />
           </div>
        </div>
     )}

@@ -16,6 +16,8 @@ import Product from './pages/Product';
 import LangSelector from './component/LangSelector';
 import Profile from './pages/Profile';
 import NotFoundPage from './pages/NotFoundPage';
+import ConfirmCode from './pages/ConfirmCode';
+import Create from './component/Create';
 
 
 
@@ -59,8 +61,16 @@ const router = createBrowserRouter([
       element : <Register/>
   },
   {
+    path : '/ConfirmCode',
+    element : <ConfirmCode/>
+  },
+  {
     path : '/profile',
     element : <Profile/>
+  },
+  {
+    path : '/Create',
+    element : <Create/>
   },
   {
     path: '*',
