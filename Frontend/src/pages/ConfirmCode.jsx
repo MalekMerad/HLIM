@@ -19,7 +19,7 @@ function ConfirmCode() {
   }, [timeLeft]);
 
   const handleInputChange = (index, value) => {
-    if (value.length > 1) return; // Un seul nbr par case
+    if (value.length > 1) return;
     const newCode = [...code];
     newCode[index] = value;
     setCode(newCode);

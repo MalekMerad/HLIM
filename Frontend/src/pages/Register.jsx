@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Upload } from "lucide-react";
 import Navbar from "../component/Navbar";
 import Footer from "../component/Footer";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import LangSelector from "../component/LangSelector";
 import "../styles/Register.scss";
-
+import { useTranslation } from 'react-i18next';
 
 function Register() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [profilePic, setProfilePic] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
+  // Handle profile picture upload
+  const handleProfilePicChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePic(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div>
@@ -20,26 +33,37 @@ function Register() {
 
       <div className="register-container">
         <div className="register-box">
-          <h2>Create an Account</h2>
+          <h2>{t("register_title")}</h2>
+          
+          <div className="profile-pic-container">
+            <label className="profile-pic-label">{t("profile_picture")}</label>
+            <div className="profile-pic-box">
+              {profilePic ? (
+                <img src={profilePic} alt="Profile Preview" className="profile-pic-preview" />
+              ) : (
+                <Upload size={40} className="upload-icon" />
+              )}
+              <input type="file" accept="image/*" onChange={handleProfilePicChange} />
+            </div>
+          </div>
 
-          {/* Nom d'utilisateur */}
+          {/* Username */}
           <div className="input-group">
-            <label>User name</label>
-            <input type="text" placeholder="Enter your username" required />
+            <label>{t("username_label")}</label>
+            <input type="text" placeholder={t("username_placeholder")} required />
           </div>
 
           {/* Email */}
           <div className="input-group">
-            <label>Email(Address)</label>
-            <input type="email" placeholder="Enter your email " required />
+            <label>{t("email_label")}</label>
+            <input type="email" placeholder={t("email_placeholder")} required />
           </div>
 
-          {/* Mot de passe */}
           <div className="input-group password-group">
-            <label>Password</label>
+            <label>{t("password_label")}</label>
             <input 
               type={passwordVisible ? "text" : "password"} 
-              placeholder="Enter your password" 
+              placeholder={t("password_placeholder")} 
               required 
             />
             <button
@@ -51,12 +75,11 @@ function Register() {
             </button>
           </div>
 
-          {/* Confirmer le mot de passe */}
           <div className="input-group password-group">
-            <label>Confirm password</label>
+            <label>{t("confirm_password_label")}</label>
             <input 
               type={confirmPasswordVisible ? "text" : "password"} 
-              placeholder="Confirm your password" 
+              placeholder={t("confirm_password_placeholder")} 
               required 
             />
             <button
@@ -68,19 +91,18 @@ function Register() {
             </button>
           </div>
 
-          {/* Numéro téléphone */}
           <div className="input-group">
-            <label>Phone number</label>
-            <input type="tel" placeholder="Enter your phone number" required />
+            <label>{t("phone_label")}</label>
+            <input type="tel" placeholder={t("phone_placeholder")} required />
           </div>
 
-          {/* Lien connexion */}
           <p className="login-link">
-          Already have an account ? <Link to="/login">Login</Link>
+            {t("already_account")} <Link to="/login">{t("login")}</Link>
           </p>
 
-          {/* Bouton créer */}
-          <button className="register-btn" onClick={()=>navigate('/ConfirmCode')}>Create</button>
+          <button className="register-btn" onClick={() => navigate('/ConfirmCode')}>
+            {t("create_button")}
+          </button>
         </div>
       </div>
 

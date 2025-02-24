@@ -80,12 +80,16 @@
 @media (max-width: 1024px) {
     .first-section {
         flex-direction: column;
-        text-align: center;
+        justify-content: center;
+        display: flex;
+        align-items: center;
     }
 
     .img-container-homora {
         justify-content: center;
-        border-left: none;
+        display: flex;
+        justify-content: center;
+        border-right: none;
     }
 
     .first-section-text {

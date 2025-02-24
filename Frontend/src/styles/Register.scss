@@ -1,4 +1,5 @@
 // Conteneur principal centré
+
 .register-container {
     display: flex;
     justify-content: center;
@@ -8,6 +9,7 @@
     backdrop-filter: blur(10px);
     padding: 30px;
     animation: fadeIn 0.8s ease-in-out;
+
   }
   
   // Boîte de formulaire avec effet de zoom à l'apparition
@@ -203,3 +205,54 @@
     }
   }
   
+
+  // Profile Picture Upload
+.profile-pic-container {
+  text-align: left;
+  margin-bottom: 15px;
+
+  .profile-pic-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .profile-pic-box {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px dashed #2264A7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      border-color: #1C4C81;
+    }
+
+    .upload-icon {
+      color: #2264A7;
+      transition: color 0.3s ease-in-out;
+    }
+
+    input {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .profile-pic-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

@@ -33,50 +33,64 @@ return (
 }
 
 
+const AuthLayout = () => {
+  return (
+    <>
+      <LangSelector />
+      <Outlet />
+    </>
+  );
+};
+
 const router = createBrowserRouter([
   {
-      path : '/',
-      element : <Layout/>,
-      children : [
-                    {
-                        path : '/',
-                        element : <Home/>
-                    },
-                    {
-                      path : 'browse',
-                      element : <Browse/>
-                    },
-                    {
-                      path : 'post/:id',
-                      element : <Product/>
-                    }
-                ]
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: 'browse',
+        element: <Browse />,
+      },
+      {
+        path: 'post/:id',
+        element: <Product />,
+      },
+    ],
   },
   {
-      path : '/login',
-      element : <Login/>
+    element: <AuthLayout />,
+    children: [
+      {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
+      },
+      {
+        path: '/ConfirmCode',
+        element: <ConfirmCode />,
+      },
+      {
+        path: '/profile',
+        element: <Profile />,
+      },
+    ],
   },
   {
-      path : '/register',
-      element : <Register/>
-  },
-  {
-    path : '/ConfirmCode',
-    element : <ConfirmCode/>
-  },
-  {
-    path : '/profile',
-    element : <Profile/>
-  },
-  {
-    path : '/Create',
-    element : <Create/>
+    path: '/Create',
+    element: <Create />,
   },
   {
     path: '*',
-    element : <NotFoundPage/>
+    element: <NotFoundPage />,
   },
-])
+]);
 
 
 function App() {

@@ -21,24 +21,22 @@ function Login() {
       <Navbar />
       <div className="login-container">
         <div className="login-box">
-          <h2>{t('Login')}</h2>
+          <h2>{t('Login_title')}</h2>
 
           {/* Email ou Téléphone */}
           <div className="input-group">
-            <label>{t('Email or Phone')}</label>
+            <label>{t('first_input')}</label>
             <input
               type="text"
-              placeholder={t('Entrez votre email ou téléphone')}
               required
             />
           </div>
 
           {/* Mot de passe */}
           <div className="input-group password-group">
-            <label>{t('Password')}</label>
+            <label>{t('second_input')}</label>
             <input
               type={passwordVisible ? "text" : "password"}
-              placeholder={t('Enter your password')}
               required
             />
             <button
@@ -52,13 +50,13 @@ function Login() {
 
           {/* Lien d'inscription */}
           <p className="register-link">
-            {t("Don't have an account yet")} 
-            <Link to="/register"> {t('Create an account')}</Link>
+            {t("register_link")} 
+            <Link to="/register"> {t('register_link_main')}</Link>
           </p>
 
           {/* Bouton connexion */}
           <button className="login-btn" onClick={handleLogin}>
-            {t('Login')}
+            {t('Login_btn')}
           </button>
         </div>
       </div>
