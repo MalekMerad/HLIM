@@ -4,6 +4,11 @@
     align-items: center;
     gap: 20px;
 
+    .btns-container{
+      display: flex;
+      flex-direction: row-reverse;
+      gap: 10px;
+    }
     h1 {
         text-align: center;
         color: #2264A7;
@@ -155,8 +160,21 @@
         align-items: center;
       }
       
-      .measure-container input {
-        width: 100px; 
+      .measure-container select {
+        width: 130px; 
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      
+      .measure-container select:required {
+        border-color: rgb(179, 176, 176); 
+        color:rgb(179, 176, 176) ;
+        background-color: aliceblue;
+      }
+
+      .measure-container input{
+        width: 80px; 
         padding: 8px;
         border: 1px solid #ccc;
         border-radius: 5px;
@@ -165,7 +183,7 @@
       .measure-container input:required {
         border-color: rgb(179, 176, 176); 
       }
-      
+
 
     .image-preview {
         display: flex;
@@ -197,4 +215,59 @@
             border: 1px solid darkorchid;
         }
     }
+    
+    .back-button {
+      border: transparent;
+      border-radius: 7px;
+      padding: 10px 20px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #2264A7;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+  }
+  
+  .back-button:hover {
+      background-color: #2264A7;
+      color: #fff;
+  }
+  
+  .back-button:disabled {
+      background-color: transparent !important;
+      color: black !important;
+      border: none;
+      opacity: 0.6; 
+      cursor: not-allowed; 
+  }
+  
+          
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .back-button {
+          left: 8%;
+          font-size: 22px;
+          padding: 4px 8px;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .back-button {
+          left: 5%;
+          font-size: 20px;
+          padding: 5px 8px;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        .back-button {
+          left: 3%;
+          font-size: 18px;
+          padding: 4px 6px;
+        }
+      }
+      
+      
 }

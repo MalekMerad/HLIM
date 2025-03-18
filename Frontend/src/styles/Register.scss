@@ -7,7 +7,7 @@
     min-height: 100vh;
     background: rgba(235, 245, 255, 0.7);
     backdrop-filter: blur(10px);
-    padding: 30px;
+    padding: 105px;
     animation: fadeIn 0.8s ease-in-out;
 
   }
@@ -28,6 +28,7 @@
       color: #2264A7;
       margin-bottom: 20px;
       animation: fadeIn 1s ease-in-out;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
   
     .input-group {
@@ -40,6 +41,7 @@
         font-weight: 500;
         color: #333;
         margin-bottom: 5px;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
   
       input {
@@ -113,6 +115,7 @@
         font-weight: 600;
         text-decoration: none;
         transition: color 0.3s ease-in-out;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   
         &:hover {
           color: #1C4C81;

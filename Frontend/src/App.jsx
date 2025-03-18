@@ -18,6 +18,8 @@ import Profile from './pages/Profile';
 import NotFoundPage from './pages/NotFoundPage';
 import ConfirmCode from './pages/ConfirmCode';
 import Create from './component/Create';
+import Settings from './pages/Settings';
+import StatsPage from './component/Stats';
 
 
 
@@ -56,8 +58,12 @@ const router = createBrowserRouter([
         element: <Browse />,
       },
       {
-        path: 'post/:id',
-        element: <Product />,
+        path: 'settings',  
+        element: <Settings />,
+      },
+      {
+        path: 'Stats',  
+        element: <StatsPage />,
       },
     ],
   },
@@ -77,8 +83,12 @@ const router = createBrowserRouter([
         element: <ConfirmCode />,
       },
       {
-        path: '/profile',
+        path: '/profile/:id',
         element: <Profile />,
+      },
+      {
+        path: 'post/:postID',
+        element: <Product />,
       },
     ],
   },
@@ -86,6 +96,7 @@ const router = createBrowserRouter([
     path: '/Create',
     element: <Create />,
   },
+  
   {
     path: '*',
     element: <NotFoundPage />,

@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaFacebookF, FaYoutube, FaTelegramPlane, FaLinkedin } from "react-icons/fa";
 import "../styles/Footer.scss";
 
 function Footer() {
@@ -27,9 +27,9 @@ function Footer() {
         <div className="footer-social">
           <h3>Follow Us</h3>
           <div className="social-icons">
-            <a href="#"><FaFacebookF /></a>
-            <a href="#"><FaTwitter /></a>
-            <a href="#"><FaInstagram /></a>
+            <a href="https://www.facebook.com/profile.php?id=61573089369855&locale=fr_FR" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+            <a href="https://t.me/+zMDd_r3_HhowNWI8" target="_blank" rel="noopener noreferrer"><FaTelegramPlane /></a>            
+            <a href="https://www.youtube.com/watch?v=3CGRSsVHehQ" target="_blank" rel="noopener noreferrer" className="text-red-600 text-2xl"><FaYoutube /></a> 
             <a href="#"><FaLinkedin /></a>
           </div>
         </div>

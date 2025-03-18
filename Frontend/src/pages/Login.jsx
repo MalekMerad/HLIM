@@ -2,41 +2,88 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; 
 import "../styles/Login.scss";
 import Navbar from "../component/Navbar";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import Footer from "../component/Footer";
 import LangSelector from "../component/LangSelector";
 import { useTranslation } from 'react-i18next';
 
 function Login() {
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate(); 
 
-  const handleLogin = () => {
-    navigate('/Profile'); 
-  };
+  const [dataForm, setDataForm] = useState({
+    email : "",
+    password : ""
+  })
 
+
+  const handleChange = (e)=>{
+    const {name, value} = e.target;
+    setDataForm((prev)=>({
+      ...prev,
+      [name] : value
+    }));
+  }
+  const handleLogin = async (event) => {
+    event.preventDefault();
+  
+    if (!dataForm.email || !dataForm.password) {
+      window.alert("Veuillez entrer un email et un mot de passe.");
+      return;
+    }
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataForm),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        console.log(`User id: ${data.id}`);
+        localStorage.setItem("userID", data.userID); // Store user ID
+        localStorage.setItem("token", data.token); // Store authentication token
+        window.dispatchEvent(new Event("storage")); // Notify other components
+        navigate(`/profile/${data.userID}`);
+        window.location.reload(); // Ensure UI updates        
+      } else {
+        window.alert("Email ou mot de passe incorrect !");
+        console.error("Error:", data.error);
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+      window.alert("Une erreur s'est produite. Veuillez réessayer plus tard.");
+    }
+  };
+  
+ 
   return (
     <div>
       <Navbar />
       <div className="login-container">
         <div className="login-box">
           <h2>{t('Login_title')}</h2>
-
-          {/* Email ou Téléphone */}
           <div className="input-group">
-            <label>{t('first_input')}</label>
+            <label><Mail size={15} className="input-icon" /> {t('first_input')}</label>
             <input
-              type="text"
+              name = "email"
+              type="email"
+              onChange={handleChange}
               required
             />
           </div>
 
-          {/* Mot de passe */}
           <div className="input-group password-group">
-            <label>{t('second_input')}</label>
+            <label><Lock size={15} className="input-icon" /> {t('second_input')}</label>
             <input
               type={passwordVisible ? "text" : "password"}
+              name="password"
+              onChange={handleChange}
               required
             />
             <button

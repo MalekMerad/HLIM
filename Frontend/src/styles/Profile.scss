@@ -1,24 +1,77 @@
 .profile-container {
+  display: flex;
+  flex-direction: row;
+  background: #FFFFFF;
+  height: 0vh;
+}
+
+.loading {
     display: flex;
-    flex-direction: row;
-    background: #f5f5f5;
-    height: 0vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 93vh;
   }
   
-  .profileContent-container {
-    flex: 1;
-    padding: 1rem;
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
   }
   
-  .profile-title {
-    color: #2264A7;
-    font-weight: normal;
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
   
-  .sideNavBar {
-    width: 60px; 
-    background: #fff;
-    border-right: 3px solid darkorchid; 
+.profileContent-container {
+  flex: 1;
+  padding: 1rem;
+}
+
+.profileImg-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #007BFF;
+  }
+}
+
+.profile-title {
+  color: #007BFF;
+  font-weight: normal;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+  .close-btn{
+    position: fixed;
+    top: 15px;
+    left: 70%;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: #007BFF;
+    display: none;
+    &:hover{
+        color : red;
+    }
+}
+
+
+.sideNavBar {
+    width: 60px;
+    background: #FFFFFF;
+    border-right: 3px solid #007BFF;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -28,162 +81,253 @@
     left: 0;
     top: 0;
     height: 100vh;
-  
-    &:hover {
-      width: 200px;
+    z-index: 1000;
 
+  &:hover {
+      width: 200px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #007BFF transparent;
+
+      .NavBarFunc .FuncName {
+          opacity: 1;
+          margin-left: 15px;
+          font-weight: 600;
+      }
+
+      .UserCredits-container {
+          width: 90%;
+          border-bottom: 2px solid #007BFF;
+          transition: border-bottom 0.2s ease-in-out;
+      }
+
+      .profileImg-container img {
+          width: 70px;
+          height: 70px;
+      }
+
+      .username {
+          display: block;
+          font-weight: 800;
+          color: #007BFF;
+          font-size: 17px;
+          margin-bottom: 5px;
+          max-height: 20px;
+      }
+  }
+  .UserCredits-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0;
+  }
+
+  .profileImg-container img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #007BFF;
+  }
+
+  .username {
+      display: none;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .NavBarFuncs-container {
+      display: flex;
+      flex-direction: column;
+      margin-top: 1rem;
+      width: 100%;
+      gap: 10px;
+  }
+
+  .NavBarFunc {
+      display: flex;
+      padding: 0.5rem;
+      font-size: 14px;
+      align-items: center;
+      padding: 1rem;
+      color: #007BFF;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.3s ease-in-out;
+
+      svg {
+          font-size: 20px;
+          margin-right: 0;
+          transition: margin-right 0.3s ease-in-out;
+      }
+
+      .FuncName {
+          opacity: 0;
+          transition: opacity 0.3s ease-in-out;
+          white-space: nowrap;
+      }
+
+      &:hover {
+          background: #007BFF;
+          color: #FFFFFF;
+
+          svg {
+              margin-right: 5px;
+          }
+      }
+  }
+}
+
+/* Bouton de déconnexion */
+.logOut-btn {
+  width: 100%;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 18px;
+  margin-top: 20px;
+  color: #007BFF;
+  cursor: pointer;
+  transition: background 0.4s ease-in-out, padding 0.4s ease-in-out;
+  overflow: hidden;
+
+  &:hover {
+      background: #007BFF;
+      color: #FFFFFF;
+  }
+
+  svg {
+      transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+      font-size: 20px;
+      margin-right: 10px;
+  }
+
+  .FuncName {
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 0;
+      display: inline-block;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  &:hover {
+      justify-content: flex-start;
+      padding-left: 10px;
+
+      svg {
+          opacity: 0;
+          transform: translateX(-20px);
+          margin-right: 0;
+      }
+
+      .FuncName {
+          opacity: 1;
+          transform: translateX(0);
+          max-width: 100%;
+      }
+  }
+
+  &:not(:hover) {
+      justify-content: center;
+
+      svg {
+          opacity: 1;
+          transform: translateX(0);
+      }
+
+      .FuncName {
+          max-width: 0;
+          opacity: 0;
+          transform: translateX(-10px);
+      }
+  }
+}
+
+
+.settings-icon {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  font-size: 24px;
+  color: #007BFF;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  display: block;
+}
+
+.settings-icon:hover {
+  color: #0056b3;
+  transform: rotate(90deg);
+}
+
+@media screen and (max-width: 768px) {
+    .menu-btn {
+      display: block; 
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: #007BFF;
+      cursor: pointer;
+      transition: color 0.3s ease-in-out;
+      z-index: 1001;
+    }
+  
+    .sideNavBar {
+      transform: translateX(-100%); /* Hide sidebar by default */
+      transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      background: #FFFFFF;
+      z-index: 1000;
+    }
+  
+    .sideNavBar.active {
+      transform: translateX(0);
+      width: 200px;
+  
+      /* Show close button when sidebar is active */
+      .close-btn {
+        display: block;
+      }
+  
+      .UserCredits-container {
+        width: 90%;
+        border-bottom: 2px solid #007BFF;
+      }
+  
+      .profileImg-container img {
+        width: 70px;
+        height: 70px;
+      }
+  
+      .username {
+        display: block;
+        font-weight: 800;
+        color: #007BFF;
+        font-size: 17px;
+        margin-bottom: 5px;
+        max-height: 20px;
+      }
+  
       .NavBarFunc .FuncName {
         opacity: 1;
         margin-left: 15px;
         font-weight: 600;
       }
-
-      .UserCredits-container{
-        width: 90%;
-        border-bottom: 2px solid darkorchid;
-        transition: border-bottom 0.2s ease-in-out;
-      }
-      .profileImg-container img {
-        width: 70px;
-        height: 70px;
-      }
-      .username{
-        display: block;
-        font-weight: 800;
-        color: #2264A7;
-        font-size: 17px;
-        margin-bottom: 5px;
-        max-height: 20px;
-      }
     }
   
-    .UserCredits-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem 0;
-    }
-  
-    .profileImg-container img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 2px solid darkorchid;
-    }
-  
-    .username {
-        display: none;
-    }
-    .NavBarFuncs-container {
-      display: flex;
-      flex-direction: column;
-      margin-top: 1rem;
-      width: 100%;
-      gap: 10px; /* Ajout d'un espacement entre les éléments */
-    }
-    
-  
-    .NavBarFunc {
-      display: flex;
-      padding: 0.5rem; 
-      font-size: 14px; 
-      align-items: center;
-      padding: 1rem;
-      color: #444;
-      width: 100%;
-      cursor: pointer;
-      transition: background 0.3s ease-in-out;
-  
-      svg {
-        font-size: 20px;
-        margin-right: 0;
-        transition: margin-right 0.3s ease-in-out;
-      }
-  
-      .FuncName {
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-        white-space: nowrap;
-      }
-  
-      &:hover {
-        background: darkorchid;
-        color: white;
-  
-        svg {
-          margin-right: 5px;
-        }
-      }
+    /* Properly hide the menu button when the sidebar is open */
+    .sideNavBar.active + .menu-btn {
+      display: none;
     }
   }
-  .logOut-btn {
-    width: 100%;
-    background: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    font-size: 18px;
-    color: #444;
-    cursor: pointer;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    transition: background 0.4s ease-in-out, padding 0.4s ease-in-out;
-    overflow: hidden;
-
-    &:hover {
-        background: darkorchid;
-        color: white;
-    }
-
-    svg {
-        transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
-        font-size: 20px;
-        margin-right: 10px; /* Ensures spacing between icon and text */
-    }
-
-    .FuncName {
-        opacity: 0;
-        transform: translateX(-10px);
-        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-        white-space: nowrap;
-        overflow: hidden;
-        max-width: 0;
-        display: inline-block;
-    }
-
-    &:hover {
-        justify-content: flex-start;
-        padding-left: 10px; /* Ensures text starts from the left edge */
-
-        svg {
-            opacity: 0;
-            transform: translateX(-20px);
-            margin-right: 0; /* Ensures no space is left when icon disappears */
-        }
-
-        .FuncName {
-            opacity: 1;
-            transform: translateX(0);
-            max-width: 100%; /* Allows full text to appear */
-        }
-    }
-
-    &:not(:hover) {
-        justify-content: center;
-
-        svg {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .FuncName {
-            max-width: 0;
-            opacity: 0;
-            transform: translateX(-10px);
-        }
-    }
-}
-
+  

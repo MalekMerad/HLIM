@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import "../styles/Home.scss";
 import Homora from '../assets/images/Homora-image.png';
@@ -11,6 +11,7 @@ import { fadeIn } from '../variants';
 function Home() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   const properties = [
     { name: "Owner 1", location: "Alger", price: '100.000,00', size: { length: '190m', wide: '200m' }, image: Propertie },
@@ -19,6 +20,15 @@ function Home() {
     { name: "Owner 3", location: "Alger", price: '1.900.000,00', size: { length: '1900m', wide: '2000m' }, image: Propertie },
     { name: "Owner 3", location: "Alger", price: '1.900.000,00', size: { length: '1900m', wide: '2000m' }, image: Propertie },
   ];
+
+  const userID = localStorage.getItem("userID");
+  const token = localStorage.getItem("token");
+
+  useEffect(()=>{
+    if(userID && token ){
+      setIsUserLoggedIn(true);
+    }
+  },[])
 
   return (
     <div className='home-container'>
@@ -59,10 +69,50 @@ function Home() {
         >
           <h1>{t('first_section_title')}</h1>
           <p>{t('first_section_desc')}</p>
-          <button className='btn-explore' onClick={() => navigate('/browse')}>{t('explore_button')}</button>
+          <div className='firstSection-btn-container'>
+              <button className='btn-explore' onClick={() => navigate('/browse')}>{t('explore_button')}</button>
+                {isUserLoggedIn && (
+                              <button className='btn-explore'onClick={()=> navigate(`/profile/${userID}`)}>{t('profile-btn')}</button>
+                                   )}
+          </div>
         </motion.div>
       </div>
 
+ {/* Change this to vip section please having three cards one for 0Da/monthly one for 1000Da/monthly */}
+ <div className="subscription-section">
+      <h2>{t('Subscription_Plans')}</h2>
+      <div className="subscription-container">
+        
+        {/* Free Plan */}
+        <div className="plan-card free-plan">
+          <h3>{t('Free_Plan')}</h3>
+          <ul>
+            <li>✔ {t('Posting_Posts')}</li>
+            <li>✔ {t('Browse_Properties')}</li>
+            <li>✔ {t('Statistics_Overview')}</li>
+            <li>✔ {t('Chat_Feature')}</li>
+          </ul>
+          <button disabled className="subscribe-btn">{t('Current_Plan')}</button>
+        </div>
+
+        {/* VIP Plan */}
+        <div className="plan-card vip-plan">
+          <h3>{t('VIP_Plan')}</h3>
+          <ul>
+            <li>✔ {t('Posting_Posts')}</li>
+            <li>✔ {t('Browse_Properties')}</li>
+            <li>✔ {t('Statistics_Overview')}</li>
+            <li>✔ {t('Chat_Feature')}</li>
+            <li>✔ {t('VIP_Section_in_Browse')}</li>
+            <li>✔ {t('Posts_Always_Displayed_in_First_Line')}</li>
+            <li>✔ {t('Notifications_Sent_to_All_Users_on_New_Post')}</li>
+          </ul>
+          <button className="subscribe-btn">{t('Upgrade_Now')}</button>
+        </div>
+
+      </div>
+    </div>
+    
       <motion.div 
         variants={fadeIn("up", 0.2)}
         initial="hidden"
@@ -86,33 +136,6 @@ function Home() {
           ))}
         </div>
       </motion.div>
-      
-      <div className="recent-posts-section">
-        <h2>{t('recent_posts_title')}</h2>
-        <div className="recent-posts-container">
-          {properties.map((property, index) => (
-            <motion.div 
-              key={index}
-              variants={fadeIn("left", 0.3 + index * 0.1)}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: false, amount: 0.7 }}
-              className="post-card"
-            >
-              <div className="img-container">
-                <img src={property.image} alt="property-img" />
-              </div>
-              <div className="info-container">
-                <h3>{property.name}</h3>
-                <p><strong>{t('location')}:</strong> {property.location}</p>
-                <p><strong>{t('size')}:</strong> L = {property.size.length} | W = {property.size.wide}</p>
-                <p><strong>{t('price')}:</strong> {property.price} DA</p>
-                <button className="btn-read-more">{t('view_details')}</button>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
       
       <div className="cta-section">
         <h2>{t('cta_title')}</h2>
