@@ -167,6 +167,10 @@
           "from":"From",
           "content":"Content",
           "reply":"Reply",
-          "no_notifications":"No notifications to display."
+          "no_notifications":"No notifications to display.",
+          "to":"to",
+           "message_error": "Sorry, an error has occurred during the operation. Please try again later!",
+           "notifications_status": "Notifications Status",
+           "message_status": "Message request"
 }
   

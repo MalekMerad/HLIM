@@ -167,6 +167,10 @@
   "from":"من",
   "content":"المحتوى",
   "reply":"الرد",
-  "no_notifications":"لا توجد إشعارات لعرضها"
+  "no_notifications":"لا توجد إشعارات لعرضها",
+  "to":"الى",
+  "message_error": "عذرًا، حدث خطأ أثناء العملية. يرجى المحاولة مرة أخرى لاحقًا!",
+   "notifications_status": "حالة الإشعارات",
+   "message_status": "طلب الارسال"
   }
   

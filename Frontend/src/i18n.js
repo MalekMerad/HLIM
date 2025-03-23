@@ -4,21 +4,21 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
 
 i18n
-  .use(HttpApi) // Load translations from files
-  .use(LanguageDetector) // Detects user's language
-  .use(initReactI18next) // Enables hooks for React
+  .use(HttpApi) 
+  .use(LanguageDetector) 
+  .use(initReactI18next) 
   .init({
-    supportedLngs: ["ar", "fr", "en"], // Add your supported languages
-    fallbackLng: "en", // Default language
+    supportedLngs: ["ar", "fr", "en"], 
+    fallbackLng: "en", 
     detection: {
       order: ["cookie", "localStorage", "navigator", "htmlTag", "path", "subdomain"],
       caches: ["cookie", "localStorage"],
     },
     backend: {
-      loadPath: "/locales/{{lng}}/translation.json", // Translation files path
+      loadPath: "/locales/{{lng}}/translation.json",
     },
     interpolation: {
-      escapeValue: false, // React already protects from XSS
+      escapeValue: false, 
     },
   });
 

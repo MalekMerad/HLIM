@@ -126,7 +126,7 @@ function Posts({ user }) {
           <p><Landmark size={16} color="blue" /> <strong>{t('muniplicit_text')} : {item.Muniplicyt || "N/A"}</strong></p>
           <p><MapPin size={16} color="green" /> <strong>{t('state_text')} : {item.state || "N/A"}</strong></p>
           <p><Home size={16} color="orange" /> <strong>{t('street_text')} : {item.street || "N/A"}</strong></p>
-          <p><DollarSign size={16} color="gold" /> <strong>{t('price_text')} : {item.price ? `${item.price}` : "N/A"} {t('Da')}</strong></p>
+          <p><DollarSign size={16} color="gold" /> <strong>{t('price_text')} : {item.price? `${item.price.toLocaleString()}` : "N/A"} {t('Da')}</strong></p>
           <p><Calendar size={16} color="red" /> <strong>{t('Date')} :</strong> {item.created_at}</p>
         </div>
         <button className="post-btn" 

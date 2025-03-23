@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear,faPlus, faListCheck, faMagnifyingGlass, faChartSimple, faBell, faRightFromBracket, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
-import ProfileImage from '../assets/images/ProfileImage.jpg';
-import HouseImage from '../assets/images/houseImage.jpg';
+import { faHeart ,faGear,
+          faPlus, faListCheck, faMagnifyingGlass, 
+          faChartSimple, faBell, faRightFromBracket, 
+          faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import emptyPFP from '../assets/images/noProfilePicture.png';
 import '../styles/Profile.scss';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import Settings from './Settings';
 import Notifications from '../component/Notifications';
 import StatsPage from '../component/Stats';
+import Favorite from '../component/Favorite';
 
 
 function Profile() {
@@ -116,6 +118,8 @@ function Profile() {
         return <Notifications/>;
       case "settings":
         return <Settings user={user}/>;
+      case "Favorite": 
+        return <Favorite />
       default:
         return <Create user={user} />;
     }
@@ -138,11 +142,10 @@ function Profile() {
       }
     }
   
-    // Remove user data from localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("userID");
   
-    // Notify components of logout
+    
     window.dispatchEvent(new Event("storage"));
   
     navigate("/");
@@ -151,11 +154,16 @@ function Profile() {
   
   return (
     <div className='profile-container'>
-      <div className='settings-icon' onClick={() => setSelectedSection("settings")}>
-        <FontAwesomeIcon icon={faGear} />
+      <div className='icons-container-header'>
+          <div className='settings-icon' onClick={() => setSelectedSection("settings")}>
+                <FontAwesomeIcon icon={faGear} />
+           </div>
+           <div className='heart-icon' onClick={() => setSelectedSection("Favorite")}>
+                <FontAwesomeIcon icon={faHeart} />
+           </div>
       </div>
-
-      {/* Menu Button - Changes Icon Based on State */}
+         
+     
       <button className="menu-btn" onClick={() => setIsOpen(!isOpen)}>
         <FontAwesomeIcon icon={isOpen ? faTimes : faBars} />
       </button>

@@ -507,8 +507,159 @@ const upload = multer({
             res.status(200).json(notifications);
         });
     });
+
+    router.delete("/delNotif/:notifID", (req, res) => {
+        console.log("Received request to delete notif with ID:", req.params.notifID);
     
-      
+        const delQuery = "DELETE FROM Notifs WHERE idNotif = ?";
+        const { notifID } = req.params;
+    
+        db.query(delQuery, [notifID], (err, result) => {
+            if (err) {
+                console.error("Database error:", err);
+                return res.status(500).json({ error: "Server Error" });
+            }
+    
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ error: "Notification not found" });
+            }
+    
+            res.status(200).json({ message: "Notification Deleted Successfully" });
+        });
+    });
+    
+    router.post("/replyNotif", (req, res) => {
+        console.log("Received replyNotif request:", req.body);
+    
+        const { notifID, senderID, receiverID, message } = req.body;
+    
+        if (!notifID || !senderID || !receiverID || !message) {
+            console.error("Missing required fields:", { notifID, senderID, receiverID, message });
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+    
+        console.log("Processing replyNotif for notifID:", notifID);
+    
+        const deleteQuery = "DELETE FROM Notifs WHERE idNotif = ?";
+        db.query(deleteQuery, [notifID.trim()], (err, deleteResult) => {
+            if (err) {
+                console.error("Database error (DELETE):", err);
+                return res.status(500).json({ error: "Server Error" });
+            }
+    
+            if (deleteResult.affectedRows === 0) {
+                console.error("Notification not found in DB:", notifID);
+                return res.status(404).json({ error: "Notification not found" });
+            }
+    
+            console.log("Notification deleted, inserting reply...");
+            const newNotifID = uuidv4(); // Use different variable name
+            const insertQuery = "INSERT INTO Notifs (idNotif, idSender, idReciever, Context) VALUES (?, ?, ?, ?)";
+            db.query(insertQuery, [newNotifID, senderID, receiverID, message], (err, insertResult) => {
+                if (err) {
+                    console.error("Database error (INSERT):", err);
+                    return res.status(500).json({ error: "Server Error" });
+                }
+    
+                res.status(200).json({ message: "Reply sent successfully!" });
+            });
+        });
+    });
+
+
+    router.post("/insertToFavorite", (req, res) => {
+        const insertQuery = "INSERT INTO favorite (idFavorite, idUser, idPost) VALUES (?, ?, ?)";
+        
+        const { userID, postID } = req.body;
+        if (!userID || !postID) {
+            return res.status(400).json({ Message: "Invalid data" });
+        }
+    
+        const favoriteID = uuidv4();
+    
+        db.query(insertQuery, [favoriteID, userID, postID], (err, result) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ Error: "Database error" });
+            }
+    
+            res.status(200).json({ Message: "Post added to favorites" });
+        });
+    });
+
+
+    router.delete("/deleteFromFavorite", (req, res) => {
+        const deleteQuery = "DELETE FROM favorite WHERE idUser = ? AND idPost = ?";
+    
+        const { userID, postID } = req.body;
+    
+        db.query(deleteQuery, [userID, postID], (err, result) => {
+            if (err) return res.status(500).json({ Error: err });
+    
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ Message: "Post not found in favorites" });
+            }
+    
+            res.status(200).json({ Message: "Post removed from favorites" });
+        });
+    });
+    
+
+    router.get("/getFavorites/:userID", (req, res) => {
+        const selectQuery = "SELECT idPost FROM favorite WHERE idUser = ?";
+    
+        const { userID } = req.params;
+        db.query(selectQuery, [userID], (err, result) => {
+            if (err) return res.status(500).json({ err });
+    
+            if (result.length === 0) {
+                return res.status(200).json({ data: [] });
+            }
+    
+            const favoritePostIDs = result.map(row => row.idPost); 
+            res.status(200).json({ data: favoritePostIDs });
+        });
+    });
+    
+
+    router.get("/favsPosts/:userID", (req, res) => {
+        const selectQuery = `
+          SELECT p.postID, p.price, p.state, p.Muniplicyt, p.street, p.created_at, pp.pic1
+          FROM posts p
+          INNER JOIN favorite f ON p.postID = f.idPost
+          INNER JOIN posts_pics pp ON p.postID = pp.postID
+          WHERE f.idUser = ? AND p.ownerID != ?;`;
+    
+        const { userID } = req.params;
+    
+        console.log("Fetching favorite posts for userID:", userID);
+    
+        if (!userID) {
+            return res.status(400).json({ Error: "Invalid userID parameter" });
+        }
+    
+        db.query(selectQuery, [userID, userID], (err, result) => {
+            if (err) {
+                console.error("Database Error:", err);
+                return res.status(500).json({ Error: "Database error", Details: err.message });
+            }
+    
+            if (result.length === 0) {
+                return res.status(404).json({ Message: "No favorite posts found", data: [] });
+            }
+    
+            const data = result.map(post => ({
+                ...post,
+                pic1: post.pic1 ? `http://localhost:5000/uploads/${post.pic1}` : null,
+                created_at: post.created_at ? new Date(post.created_at).toISOString() : null
+            }));
+    
+            res.status(200).json({ data });
+        });
+    });
+    
+    
+    
       router.post("/logout", authenticateToken, (req, res) => {
         const token = req.headers.authorization?.split(" ")[1];
     

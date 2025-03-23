@@ -166,6 +166,10 @@
   "from":"De",
   "content":"Contenu",
   "reply":"Répondre",
-  "no_notifications":"Aucune notification à afficher."
+  "no_notifications":"Aucune notification à afficher.",
+  "to":"A",
+  "message_error": "Désolé, une erreur s'est produite lors de l'opération. Veuillez réessayer plus tard !",
+   "notifications_status": "Statut des notifications",
+   "message_status": "Message requet"
   }
   

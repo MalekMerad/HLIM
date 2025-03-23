@@ -107,10 +107,91 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+  @media (max-width: 768px) {
+    margin: 20px;
+  }
+
 }
 
-.product-card:hover {
-  transform: scale(1.05);
+.card-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+
+  .date-text{
+    color:gray;
+    font-weight: 900;
+    font-size: 1.2rem;
+  }
+
+  .favorite-icon{
+    cursor: pointer;
+  }
+}
+
+
+.Info-Panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(100%);
+  background-color: #0056b3;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); 
+  padding: 30px 50px;
+  border-radius: 20px;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 2rem;
+      color: white;
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+      animation: fadeIn 0.6s ease-in-out;
+  
+      &::after {
+        content: "";
+        width: 60%;
+        height: 4px;
+        background: #38b6ff;
+        position: absolute;
+        bottom: -8px;
+        left: 20%;
+        border-radius: 10px;
+      }
+  }
+
+  p {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #e3f2fd;
+      max-width: 90%;
+      text-align: center;
+      line-height: 1.5;
+  }
+
+  
+  @media (max-width: 768px) {
+      width: 90%;
+      padding: 20px;
+      h1 {
+          font-size: 1.7rem;
+      }
+      p {
+          font-size: 1.2rem;
+      }
+  }
 }
 
 .product-card img {
@@ -118,6 +199,7 @@
   height: 200px; 
   object-fit: cover; 
   border-radius: 5px;
+  border: 1px solid #2264A7;
 }
 
 .post_info {
@@ -362,7 +444,7 @@
           flex: 1;
           display: flex;
           gap: 10px;
-      
+        
           .suggestion-input {
             flex: 1;
             padding: 12px;
@@ -371,13 +453,13 @@
             font-size: 16px;
             outline: none;
             transition: all 0.3s ease-in-out;
-      
+        
             &:focus {
               border-color: #2264A7;
               box-shadow: 0 0 8px rgba(34, 100, 167, 0.5);
             }
           }
-      
+        
           .submit-btn {
             background: #38b6ff;
             color: white;
@@ -387,12 +469,26 @@
             font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
-      
+        
             &:hover {
               background: #2264A7;
             }
           }
+        
+          @media (max-width: 768px) {
+            flex-direction: column;
+            gap: 15px;
+        
+            .suggestion-input {
+              width: 100%;
+            }
+        
+            .submit-btn {
+              width: 100%;
+            }
+          }
         }
+        
       }
       
     }

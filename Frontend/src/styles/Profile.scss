@@ -259,10 +259,42 @@
   display: block;
 }
 
+
 .settings-icon:hover {
   color: #0056b3;
   transform: rotate(90deg);
 }
+
+.heart-icon {
+  position: fixed;
+  right: 20px;
+  top: 60px;
+  font-size: 24px;
+  color: #007BFF;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  display: block;
+}
+
+.heart-icon:hover {
+  color: red;
+  transform: translateY(-5px) scale(1.1);
+}
+
+@keyframes heart-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.heart-icon:hover {
+  animation: heart-bounce 0.6s ease-in-out infinite; /* Makes it bounce slightly */
+}
+
+
 
 @media screen and (max-width: 768px) {
     .menu-btn {

@@ -6,7 +6,7 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     animation: fade-in 0.5s ease-in-out;
-
+    z-index: inherit;
   }
 
   .editInfo_container {
@@ -16,6 +16,7 @@
     padding: 20px 40px;
     border-radius: 5px;
     color: black;
+    
   }
   [dir="rtl"] .editInfo_container {
     flex-direction: row-reverse;
@@ -25,7 +26,6 @@
   }
   
   
-  /* Animation de fondu */
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -43,7 +43,7 @@
     align-items: center;
   }
   
-  /* Effet de zoom sur la photo de profil */
+ 
   .profile-pic {
     width: 120px;
     height: 120px;
@@ -84,7 +84,6 @@
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   }
   
-  /* Conteneur du bouton d'upload */
   .upload-container {
     display: flex;
     flex-direction: column;
@@ -92,7 +91,6 @@
     margin-top: 10px;
   }
   
-  /* Bouton customisé */
   .upload-btn {
     display: inline-flex;
     align-items: center;
@@ -108,23 +106,19 @@
     transition: all 0.3s ease-in-out;
   }
   
-  /* Animation au survol */
   .upload-btn:hover {
     background: #138496;
     transform: scale(1.05);
   }
   
-  /* Icône du bouton */
   .upload-btn svg {
     font-size: 16px;
   }
   
-  /* Cacher l'input file par défaut */
   .upload-input {
     display: none;
   }
   
-  /* Style du label qui agit comme un bouton */
   .upload-label {
     display: inline-block;
     cursor: pointer;

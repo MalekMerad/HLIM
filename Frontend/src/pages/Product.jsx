@@ -273,7 +273,7 @@ function Product() {
                         setShowInfoPanel(false)
                         setShowContact(false)
                     }}>x</button>
-                            <h1>Message request</h1>
+                              <h1>{t('message_status')}</h1>
                             <p>{messageRequestState}</p>
                     </div> 
                 )

@@ -1,63 +1,66 @@
 import React, { useEffect } from 'react';
-import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar ,faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import HouseImage from '../assets/images/houseImage.jpg';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import noProfilePicture from '../assets/images/emptyImagePlaceHolder.png';
 import HomeBluePrint from '../assets/images/home-blueprints.jpeg';
 import landBluePrint from '../assets/images/lands-bluePrint.jpg';
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, MapPin, Home, DollarSign, Landmark, Calendar } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Home, DollarSign, Landmark, Calendar, Heart } from "lucide-react";
 import { useNavigate , useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../styles/Browse.scss';
 
 function Browse() {
-  const { t } = useTranslation();
-  const {i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const categories = [
     { title: t('houses_title'), description: t('findYourDreamHome'), img: HomeBluePrint },
     { title: t('lands_title'), description: t('exploreAvailableLands'), img: landBluePrint },
   ];
+
    const [currentPage, setCurrentPage] = useState(1);
    const [posts, setPosts] = useState([]); 
    const [loading, setLoading] = useState(false); 
    const [error, setError] = useState(null);
+   const [showStatusPanel, setShowStatusPanel] = useState(false);
+   const [statusMessage, setStatusMessage] = useState("");
+   const [favoritePosts, setFavoritePosts] = useState({}); 
    
    const navigate = useNavigate();
    const userID = localStorage.getItem("userID");
+   const token = localStorage.getItem("token");
 
    useEffect(() => {
-     const fetchData = async () => {
-       try {
-         console.log("Before fetching...");
-   
-         const response = await fetch("http://localhost:5000/api/auth/all-posts", {
-           method: "POST",  // Changed to POST to send data in the body
-           headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({ userID })
-         });
-   
-         if (!response.ok) {
-           throw new Error("Failed to fetch posts");
-         }
-   
-         const result = await response.json();
-         console.log("All posts fetch result:", result);
-   
-         
-         setPosts(result.data || []);
-       } catch (error) {
-         console.error("Failed to fetch posts:", error);
-         setError("Failed to fetch posts");
-       } finally {
-         setLoading(false);
-       }
-     };
-   
-     fetchData();
-   }, []);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        console.log("Before fetching...");
+  
+        const response = await fetch("http://localhost:5000/api/auth/all-posts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userID })
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to fetch posts");
+        }
+  
+        const result = await response.json();
+        console.log("All posts fetch result:", result);
+  
+        setPosts(result.data || []);
+      } catch (error) {
+        console.error("Failed to fetch posts:", error);
+        setError("Failed to fetch posts");
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
 
    const formatPostDate = (postDate) => {
     if (!postDate) return "Date inconnue"; 
@@ -97,15 +100,88 @@ function Browse() {
      rows.push(currentPageData.slice(i, i + cardsPerRow));
    }
  
-   if (loading) {
-     return (
-       <div className="loading">
-         <div className="spinner"></div>
-       </div>
-     );
-   }
- 
+   useEffect(() => {
+    const fetchFavs = async () => {
+      try {
+        const result = await fetch(`http://localhost:5000/api/auth/getFavorites/${userID}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
   
+        if (!result.ok) {
+          console.log("Favs fetch Error");
+          return;
+        }
+  
+        const response = await result.json();
+        
+        const favPosts = response.data.reduce((acc, postID) => {
+          acc[postID] = "red";  
+          return acc;
+        }, {});
+  
+        setFavoritePosts(favPosts);
+      } catch (error) {
+        console.error("Error fetching favorite posts:", error);
+      }
+    };
+  
+    fetchFavs();
+  }, [userID, token]);
+  
+
+   const handleToggleFavorite = async (postID) => {
+
+    const isCurrentlyFavorite = favoritePosts[postID] === "red";
+  
+    setFavoritePosts((prevFavorites) => ({
+      ...prevFavorites,
+      [postID]: isCurrentlyFavorite ? "white" : "red",
+    }));
+  
+    const requestBody = { userID, postID };
+  
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/auth/${isCurrentlyFavorite ? "deleteFromFavorite" : "insertToFavorite"}`,
+        {
+          method: isCurrentlyFavorite ? "DELETE" : "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        setStatusMessage(data.Message || t("message_error"));
+
+        setFavoritePosts((prevFavorites) => ({
+          ...prevFavorites,
+          [postID]: isCurrentlyFavorite ? "red" : "white",
+        }));
+      } else {
+        setStatusMessage(isCurrentlyFavorite ? t("favorite_deleted_message") : t("favorite_added_message"));
+      }
+  
+      setShowStatusPanel(true);
+    } catch (error) {
+      setStatusMessage(t("message_error"));
+      setShowStatusPanel(true);
+      
+      setFavoritePosts((prevFavorites) => ({
+        ...prevFavorites,
+        [postID]: isCurrentlyFavorite ? "red" : "white",
+      }));
+    }
+  };
+
   return (
     <div className="browse-container">
         <div className="options-section">
@@ -126,8 +202,8 @@ function Browse() {
           ))}
 
         <div className="contact-panel suggest-category">
-              <div className="description">
-                <h3>{t('description_title')}</h3>
+                  <div className="description">
+                  <h3>{t('description_title')}</h3>
                   <p>{t('descritption_context')}</p>
         </div>
   <div className="input-section">
@@ -150,6 +226,16 @@ function Browse() {
           <div className="browse-row" key={index}>
             {row.map((item) => (
               <div className="product-card" key={item.postID}>
+                   <div className="card-header">
+                          <div className='favorite-icon'>
+                          <Heart 
+                                size={20} 
+                                fill={favoritePosts[item.postID] === "red" ? "red" : "white"}
+                                onClick={() => handleToggleFavorite(item.postID)}
+                          />;
+                          </div>
+                          <div className='date-text'>{formatPostDate(item.created_at)}</div>
+                    </div>
                 <img
                   src={item.pic1 || noProfilePicture}
                   alt="property pic"
@@ -168,12 +254,8 @@ function Browse() {
                     <p className="text">{item.street}</p>
                   </div>
                   <div className="info-row">
-                    <p className="title"><Calendar size={16} color="#cccccc" /> {t('Date')}</p>
-                    <p className='date'> {formatPostDate(item.created_at)}</p>
-                  </div>
-                  <div className="info-row">
                     <p className="title"><DollarSign size={16} color="#cccccc" /> {t('price_text')}</p>
-                    <p className="price">{item.price}Da</p>
+                    <p className="price">{item.price.toLocaleString()}Da</p>
                   </div>
                 </div>
                 <button
@@ -210,6 +292,13 @@ function Browse() {
   </button>
 </div>
 
+{showStatusPanel && (
+                <div className="Info-Panel">
+                    <button className="closeContact-btn" onClick={() => setShowStatusPanel(false)}>x</button>
+                    <h1>{t('notifications_status')}</h1>
+                    <p>{statusMessage}</p>
+                </div>
+            )}
 
     </div>
   );
