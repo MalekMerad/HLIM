@@ -31,7 +31,7 @@ function Posts({ user }) {
         });
   
         if (!response.ok) {
-          throw new Error(`Posts are not available`);
+          throw new Error(t('posts_not_available'));
         }
   
         const result = await response.json();
@@ -122,12 +122,12 @@ function Posts({ user }) {
           onError={(e) => (e.target.src = defaultPic)} 
         />
         <div className="post_info">
-        <p><Tag size={16} color="purple" /> <strong>{t('Type')} : {item.type_product || "N/A"}</strong></p> 
-          <p><Landmark size={16} color="blue" /> <strong>{t('muniplicit_text')} : {item.Muniplicyt || "N/A"}</strong></p>
-          <p><MapPin size={16} color="green" /> <strong>{t('state_text')} : {item.state || "N/A"}</strong></p>
-          <p><Home size={16} color="orange" /> <strong>{t('street_text')} : {item.street || "N/A"}</strong></p>
-          <p><DollarSign size={16} color="gold" /> <strong>{t('price_text')} : {item.price? `${item.price.toLocaleString()}` : "N/A"} {t('Da')}</strong></p>
-          <p><Calendar size={16} color="red" /> <strong>{t('Date')} :</strong> {item.created_at}</p>
+        <p>{t('Type')} : <strong >{item.type_product || "N/A"}</strong></p> 
+          <p>{t('muniplicit_text')} : <strong>{item.Muniplicyt || "N/A"}</strong></p>
+          <p>{t('state_text')} : <strong>{item.state || "N/A"}</strong></p>
+          <p>{t('street_text')} : <strong>{item.street || "N/A"}</strong></p>
+          <p>{t('price_text')} : <strong>{item.price? `${item.price.toLocaleString()}` : "N/A"} {t('Da')}</strong></p>
+          <p>{t('Date')} : <strong>{item.created_at}</strong> </p>
         </div>
         <button className="post-btn" 
           onClick={() => navigate(`/post/${item.postID}`, { state: { from: location.pathname } })}>

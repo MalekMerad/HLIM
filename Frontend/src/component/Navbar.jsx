@@ -22,7 +22,7 @@ function Navbar() {
 
   const userID = localStorage.getItem("userID");
   const token = localStorage.getItem("token");
-
+  const role = localStorage.getItem("role");
   
   const modalRef = useRef(null);
   const [position, setPosition] = useState({x: 500, y: -435 });
@@ -94,7 +94,6 @@ function Navbar() {
      
            const result = await response.json();
            console.log("All posts fetch result:", result);
-     
            
            setCurrentPost(result.data || []);
          } catch (error) {

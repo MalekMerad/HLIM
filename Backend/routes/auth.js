@@ -78,7 +78,7 @@ const upload = multer({
         return res.status(400).json({ error: "Email and password are required" });
     }
 
-    const selectQuery = "SELECT id, pass FROM users WHERE email = ?";
+    const selectQuery = "SELECT id, pass, role FROM users WHERE email = ?";
     db.query(selectQuery, [email], (err, results) => {
         if (err) {
             console.error("Database error:", err);
@@ -91,7 +91,7 @@ const upload = multer({
 
         const user = results[0];
 
-        // Compare provided password with stored hashed password
+        // Compare provided password with stored hashed passwordz
         bcrypt.compare(password, user.pass, (err, isMatch) => {
             if (err) {
                 console.error("Error comparing password:", err);
@@ -105,7 +105,7 @@ const upload = multer({
 
             // Generate JWT token
             const token = jwt.sign(
-                { userID: user.id, email, jti: uuidv4() }, 
+                { userID: user.id, email, role: user.role, jti: uuidv4() }, 
                 process.env.JWT_SECRET, 
                 { expiresIn: "1h" }
             );
@@ -113,10 +113,29 @@ const upload = multer({
             // Store the token in active sessions
             activeTokens.add(token);
 
-            res.status(200).json({ message: "Login successful", token, userID: user.id });
+            res.status(200).json({ message: "Login successful", token, userID: user.id, role: user.role  });
         });
     });
     });
+
+        // Middleware pour vérifier le token JWT
+    const authenticateToken = (req, res, next) => {
+        const token = req.header("Authorization")?.split(" ")[1];
+
+        if (!token) {
+            return res.status(401).json({ error: "Accès non autorisé, token manquant" });
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+            if (err) {
+                return res.status(403).json({ error: "Token invalide ou expiré" });
+            }
+            req.user = user; // Stocke l'utilisateur dans la requête
+            next();
+        });
+    };
+
+    
 
 // GET PROFILE ROUTE
     router.get("/profile/:id", (req, res) => {
@@ -199,6 +218,7 @@ const upload = multer({
         const { ownerID, phoneNum, email, state, municipality, street, width, height, price, type_product } = req.body;
         const postID = uuidv4();
         const imagePaths = req.files.map((file) => file.filename);
+        const status = "pending"; // Ajout du statut par défaut
     
         // Vérification des champs obligatoires
         if (!ownerID || !phoneNum || !email || !state || !municipality || !street || !width || !height || !price || !type_product) {
@@ -211,20 +231,21 @@ const upload = multer({
             return res.status(400).json({ error: "Invalid type_product. Accepted values: Land, House, Company, Other" });
         }
     
+        const ownerityID = uuidv4();
         // Insérer les données du propriétaire
-        const insertOwnerData = "INSERT INTO owner (ownerID, phoneNum, email) VALUES (?, ?, ?)";
-        db.query(insertOwnerData, [ownerID, phoneNum, email], (err) => {
+        const insertOwnerData = "INSERT INTO owner (id,ownerID, phoneNum, email) VALUES (? ,?, ?, ?)";
+        db.query(insertOwnerData, [ownerityID,ownerID, phoneNum, email], (err) => {
             if (err) {
                 console.error("Error inserting owner:", err);
                 return res.status(500).json({ error: "Server error" });
             }
     
-            // Insérer les données du post avec type_product
+            // Insérer les données du post avec status = "pending"
             const insertPostData = `
-                INSERT INTO posts (postID, ownerID, price, state, Muniplicyt, street, width, height, type_product, created_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+                INSERT INTO posts (postID, ownerID, price, state, Muniplicyt, street, width, height, type_product, status, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
             `;
-            db.query(insertPostData, [postID, ownerID, price, state, municipality, street, width, height, type_product], (err) => {
+            db.query(insertPostData, [postID, ownerID, price, state, municipality, street, width, height, type_product, status], (err) => {
                 if (err) {
                     console.error("Error inserting post:", err);
                     return res.status(500).json({ error: "Server error" });
@@ -239,7 +260,7 @@ const upload = multer({
                         return res.status(500).json({ error: "Server error" });
                     }
     
-                    res.status(201).json({ message: "Post created successfully", postID });
+                    res.status(201).json({ message: "Post created successfully with status pending", postID });
                 });
             });
         });
@@ -252,7 +273,7 @@ const upload = multer({
             DATE_FORMAT(p.created_at, '%Y-%m-%d') AS created_at 
             FROM posts p 
             INNER JOIN posts_pics pp ON p.postID = pp.postID 
-            WHERE p.ownerID = ?
+            WHERE p.ownerID = ? and p.status = 'Accepted'
         `;
     
         const { ownerID } = req.query;
@@ -290,12 +311,12 @@ const upload = multer({
         }
       
         const selectQuery = `
-          SELECT p.postID, p.price, p.state, p.Muniplicyt, p.street, p.created_at, pp.pic1 
+          SELECT p.postID, p.price, p.state, p.type_product, p.Muniplicyt, p.street, p.created_at,p.status, pp.pic1 
           FROM posts p 
           INNER JOIN posts_pics pp ON p.postID = pp.postID
-          WHERE p.ownerID != ?`; // Excluding the user's own posts
+          WHERE p.ownerID != ? and p.status = 'Accepted'`;
       
-        db.query(selectQuery, [userID], (err, result) => { // Fixed misplaced comma
+        db.query(selectQuery, [userID], (err, result) => {
           if (err) {
             console.error("Database query error:", err);
             return res.status(500).json({ error: "Internal Server Error" });
@@ -315,7 +336,204 @@ const upload = multer({
         });
       });    
     
-      router.get("/post/:postID", (req, res) => {
+
+      router.post("/all-posts-request", (req, res) => {
+        const { userID } = req.body; // Extract userID from request body
+      
+        if (!userID) {
+          return res.status(400).json({ error: "User ID is required" });
+        }
+      
+        const selectQuery = `
+            SELECT p.postID, p.price, p.state, p.Muniplicyt, p.street, p.created_at, p.status, pp.pic1 
+            FROM posts p 
+            INNER JOIN posts_pics pp ON p.postID = pp.postID
+            WHERE p.ownerID != ? AND p.status = 'pending'`; // Filtering only pending posts
+
+        db.query(selectQuery, [userID], (err, result) => { // Fixed misplaced comma
+          if (err) {
+            console.error("Database query error:", err);
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+      
+          if (result.length === 0) {
+            return res.status(404).json({ error: "No posts found" });
+          }
+      
+          const data = result.map(post => ({
+            ...post,
+            pic1: post.pic1 ? `http://localhost:5000/uploads/${post.pic1}` : null,
+            created_at: post.created_at ? new Date(post.created_at).toISOString() : null
+          }));
+    
+          return res.status(200).json({ data });
+        });
+      });    
+
+
+      router.post("/all-posts-Day", (req, res) => {
+        const { userID } = req.body;
+    
+        if (!userID) {
+            return res.status(400).json({ error: "User ID is required" });
+        }
+    
+        const selectQuery = `
+            SELECT p.postID, p.created_at
+            FROM posts p 
+            WHERE p.ownerID != ?`;
+    
+        db.query(selectQuery, [userID], (err, result) => {
+            if (err) {
+                console.error("Database query error:", err);
+                return res.status(500).json({ error: "Internal Server Error" });
+            }
+    
+            if (result.length === 0) {
+                return res.status(404).json({ error: "No posts found" });
+            }
+    
+            console.log("Raw query result:", result);
+    
+            const daysCount = {
+                Monday: 0, Tuesday: 0, Wednesday: 0, Thursday: 0,
+                Friday: 0, Saturday: 0, Sunday: 0
+            };
+    
+            result.forEach(post => {
+                if (post.created_at) {
+                    const day = new Date(post.created_at).toLocaleString('en-US', { weekday: 'long' });
+                    if (daysCount[day] !== undefined) {
+                        daysCount[day] += 1;
+                    }
+                }
+            });
+    
+            console.log("Processed days count:", daysCount);
+    
+            return res.status(200).json({
+                labels: Object.keys(daysCount),
+                data: Object.values(daysCount)
+            });
+        });
+    });
+
+    router.post("/all-posts-Month", (req, res) => {
+        const { userID } = req.body;
+    
+        if (!userID) {
+            return res.status(400).json({ error: "User ID is required" });
+        }
+    
+        const selectQuery = `
+            SELECT p.postID, p.created_at
+            FROM posts p 
+            WHERE p.ownerID != ?`;
+    
+        db.query(selectQuery, [userID], (err, result) => {
+            if (err) {
+                console.error("Database query error:", err);
+                return res.status(500).json({ error: "Internal Server Error" });
+            }
+    
+            if (result.length === 0) {
+                return res.status(404).json({ error: "No posts found" });
+            }
+    
+            console.log("Raw query result:", result);
+    
+            const monthsCount = {
+                Jan: 0, Feb: 0, Mar: 0, Apr: 0, May: 0, Jun: 0,
+                Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0
+            };
+    
+            result.forEach(post => {
+                if (post.created_at) {
+                    const month = new Date(post.created_at).toLocaleString('en-US', { month: 'short' });
+                    if (monthsCount[month] !== undefined) {
+                        monthsCount[month] += 1;
+                    }
+                }
+            });
+    
+            console.log("Processed months count:", monthsCount);
+    
+            return res.status(200).json({
+                labels: Object.keys(monthsCount),
+                data: Object.values(monthsCount)
+            });
+        });
+    });
+    
+
+    router.post("/update-post-status", (req, res) => {
+        const { postID, status } = req.body;
+
+        if (!postID || !status) {
+            return res.status(400).json({ error: "Post ID et statut sont requis" });
+        }
+
+        const updateQuery = `UPDATE posts SET status = ? WHERE postID = ?`;
+
+        db.query(updateQuery, [status, postID], (err, result) => {
+            if (err) {
+                console.error("Erreur lors de la mise à jour du statut:", err);
+                return res.status(500).json({ error: "Erreur interne du serveur" });
+            }
+
+            return res.status(200).json({ message: "Statut mis à jour avec succès" });
+        });
+    });
+
+
+    // Route pour récupérer le nombre de posts en attente
+    router.get("/pending-posts-count", (req, res) => {
+        const query = `SELECT COUNT(*) AS pendingCount FROM posts WHERE status = 'pending'`;
+
+        db.query(query, (err, result) => {
+            if (err) {
+                console.error("Erreur lors de la récupération du nombre de posts en attente:", err);
+                return res.status(500).json({ error: "Erreur interne du serveur" });
+            }
+
+            console.log("Résultat de la requête:", result); // Affiche le résultat dans la console
+
+            return res.status(200).json({ pendingCount: result[0].pendingCount });
+        });
+    });
+
+    router.get("/accepted-posts-count", (req, res) => {
+        const query = `SELECT COUNT(*) AS acceptedCount FROM posts WHERE status = 'Accepted'`;
+    
+        db.query(query, (err, result) => {
+            if (err) {
+                console.error("Erreur lors de la récupération du nombre de posts acceptés:", err);
+                return res.status(500).json({ error: "Erreur interne du serveur" });
+            }
+    
+            console.log("Résultat de la requête:", result); // Affiche le résultat dans la console
+    
+            return res.status(200).json({ acceptedCount: result[0].acceptedCount });
+        });
+    });
+
+    router.get("/rejected-posts-count", (req, res) => {
+        const query = `SELECT COUNT(*) AS rejectedCount FROM posts WHERE status = 'Rejected'`;
+    
+        db.query(query, (err, result) => {
+            if (err) {
+                console.error("Erreur lors de la récupération du nombre de posts refusés:", err);
+                return res.status(500).json({ error: "Erreur interne du serveur" });
+            }
+    
+            console.log("Résultat de la requête:", result); // Affiche le résultat dans la console
+    
+            return res.status(200).json({ rejectedCount: result[0].rejectedCount });
+        });
+    });
+    
+
+    router.get("/post/:postID", (req, res) => {
         const { postID } = req.params;
     
         const ownerDataQuery = `
@@ -357,6 +575,7 @@ const upload = multer({
         });
     });
         
+    
 
     // Update Request
     router.put("/update/:postID", upload.array("images", 4), (req, res) => {
@@ -407,19 +626,6 @@ const upload = multer({
             });
         });
     });
-
-    const authenticateToken = (req, res, next) => {
-        const token = req.headers.authorization?.split(" ")[1];
-        if (!token) return res.status(401).json({ message: "No token provided" });
-      
-        jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-          if (err) return res.status(403).json({ message: "Invalid token" });
-      
-          req.user = user;
-          next();
-        });
-      };
-
 
     //page setting
     router.put("/owner/:ownerID", (req, res) => {

@@ -169,6 +169,14 @@ function Product() {
         }
     }
 
+    const handleExit =()=>{
+        if(location.state?.from){
+         navigate(location.state.from)
+        }else{
+            navigate("/browse")
+        }
+    }
+
     if (loading) return <p>Loading product details...</p>;
     if (error) return <p>{t("error")}: {error}</p>;
     if (!product) return <p>Product not found</p>;
@@ -204,9 +212,21 @@ function Product() {
                 <div className="details">
                     <div className='product-info'>
                         <h3>{t("property_info")} <FontAwesomeIcon icon={faHouse}/>:</h3>
-                        <p><DollarSign size={16} /> <strong>{t("price")}:</strong> {product.price}Da</p>
+                        <p><DollarSign size={16} /> <strong>{t("price")}:</strong> {product.price.toLocaleString()}Da</p>
                         <p><Ruler size={16} /> <strong>{t("measures")}:</strong> {product.measures.x}m x {product.measures.y}m</p>
-                        <p><MapPin size={16} /> <strong>{t("location")}:</strong> {product.state} // {product.Muniplicity} // {product.Rue}</p>
+                        <p>
+                            <MapPin size={16} /> <strong>{t("location")}:</strong>{" "}
+                                <a
+                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                                    `${product.state}, ${product.Muniplicity}, ${product.Rue}`
+                                    )}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ textDecoration: "none", color: "blue" }}
+                                     >
+                                    {product.state} // {product.Muniplicity} // {product.Rue}
+                                </a>    
+                        </p>
                     </div>
                     <div className='owner-info'>
                         <h3>{t("owner_info")} <FontAwesomeIcon icon={faUserTie}/>:</h3>
@@ -246,7 +266,7 @@ function Product() {
                     </>
                 ) : (
                     <>
-                        <button className="btn exit-btn" onClick={() => navigate('/browse')}  style={{ backgroundColor: "#dc3545", color: "white" }}><LogOut size={16} /> {t("exit")}</button>
+                        <button className="btn exit-btn" onClick={handleExit} style={{ backgroundColor: "#dc3545", color: "white" }}><LogOut size={16} /> {t("exit")}</button>
                         <button className="btn contact-btn" onClick={()=> setShowContact(true)} style={{ backgroundColor: "#28a745", color: "white" }}><MessageCircle size={16} /> {t("contact")}</button>
                     </>
                 )}

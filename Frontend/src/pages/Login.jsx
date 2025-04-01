@@ -48,9 +48,17 @@ function Login() {
         console.log(`User id: ${data.id}`);
         localStorage.setItem("userID", data.userID); // Store user ID
         localStorage.setItem("token", data.token); // Store authentication token
+        localStorage.setItem("role",data.role);
         window.dispatchEvent(new Event("storage")); // Notify other components
-        navigate(`/profile/${data.userID}`);
-        window.location.reload(); // Ensure UI updates        
+      
+        // Redirection selon le rôle
+      if (data.role === 0) {
+        navigate("/admin"); // Redirection vers la page admin
+      } else {
+        navigate(`/profile/${data.userID}`); // Redirection vers le profil utilisateur
+      }        
+      
+      window.location.reload(); // Ensure UI updates        
       } else {
         window.alert("Email ou mot de passe incorrect !");
         console.error("Error:", data.error);

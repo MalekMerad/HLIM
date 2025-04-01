@@ -5,7 +5,7 @@ import noProfilePicture from '../assets/images/emptyImagePlaceHolder.png';
 import HomeBluePrint from '../assets/images/home-blueprints.jpeg';
 import landBluePrint from '../assets/images/lands-bluePrint.jpg';
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, MapPin, Home, DollarSign, Landmark, Calendar, Heart } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Home, DollarSign, Landmark, Calendar, Heart, FilterIcon } from "lucide-react";
 import { useNavigate , useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../styles/Browse.scss';
@@ -88,7 +88,7 @@ function Browse() {
     }
   };
    
-   const pageRows = 3;
+   const pageRows = 5;
    const cardsPerRow = 5;
  
    const totalPage = Math.max(1, Math.ceil(posts.length / pageRows));
@@ -219,9 +219,11 @@ function Browse() {
       </div>
       <div className="products-container" id="products-container">
         <h2>{t('product_list_title')}</h2>
- 
-        {rows.length === 0 && <h3 className="no-posts">{t('No_Offers_to_be_displayed')}</h3>}
-
+          {userID === null ? (
+              <h3 className="no-posts">{t('SignUpRequest')}</h3>
+          ) : rows.length === 0 ? (
+            <h3 className="no-posts">{t('No_Offers_to_be_displayed')}</h3>
+          ) : null}
         {rows.map((row, index) => (
           <div className="browse-row" key={index}>
             {row.map((item) => (

@@ -170,6 +170,27 @@
   "to":"A",
   "message_error": "Désolé, une erreur s'est produite lors de l'opération. Veuillez réessayer plus tard !",
    "notifications_status": "Statut des notifications",
-   "message_status": "Message requet"
+   "message_status": "Message requet",
+   "posts_not_available":"Les publications sont pas disponible a le moment",
+   "Favorite_list_header":"la list des favorites",
+   "DashBoard_text": "Tableau de bord",
+   "Requests_text": "Demandes",
+   "Request_Summary": "Résumé des demandes",
+   "Total_text": "Total",
+   "Approved_text": "Approuvées",
+   "Pending_text": "En attente",
+   "Rejected_text": "Rejetées",
+   "Approval_Rejection_Rate": "Taux d'approbation et de rejet",
+   "Requests_Distribution": "Répartition des demandes",
+   "Requests_per_Day": "Demandes par jour de la semaine",
+   "Requests_per_Month": "Demandes par mois",
+   "All_Posts": "Tous les articles",
+   "Post_Image": "Image du post",
+   "Accept_text": "Accepter",
+   "Reject_text": "Rejeter",
+   "No_Posts": "Aucun post trouvé.",
+  "Post_Created": "Le post a été créé",
+  "Post_Created_Message": "Merci de partager sur Homora ! Votre post sera examiné.",
+   "SignUpRequest":"Créer un compte / inscrit pour Afficher les posts"
   }
   

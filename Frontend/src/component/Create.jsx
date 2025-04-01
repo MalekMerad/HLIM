@@ -11,7 +11,7 @@ function Create({ user }) {
   const [images, setImages] = useState([]);
   const [hoveredStep, setHoveredStep] = useState(null);
   const [typeProduct, setTypeProduct] = useState('');
-
+  const [showStatusPanel, setShowStatusPanel] = useState(false)
 
   const token = localStorage.getItem("token");
   const userID = localStorage.getItem("userID");
@@ -28,13 +28,15 @@ function Create({ user }) {
     price: ""
   });
 
-  const stepIcons = [User, Home, Image, CheckCircle]; // Ajout de stepIcons
+  const stepIcons = [User, Home, Image, CheckCircle];
 
   const handleSubmit = async () => {
     if (step < 3) {
       setStep(step + 1);
-      setPrevButtonDisable(false); // Activation du bouton "Précédent" après le premier clic
+      setPrevButtonDisable(false); 
       return;
+    }else{
+      setShowStatusPanel(true)
     }
 
     const formData = new FormData();
@@ -60,11 +62,6 @@ function Create({ user }) {
       });
 
       const result = await response.json();
-      if (response.ok) {
-        alert("Post created successfully!");
-      } else {
-        alert(`Error: ${result.error}`);
-      }
     } catch (error) {
       console.error("Failed to submit post:", error);
       alert("Failed to create post. Please try again.");
@@ -178,13 +175,22 @@ function Create({ user }) {
           </div>
         )}
       </div>
-      <div className='btns-container'>
-        <button className='submit-btn' onClick={handleSubmit}>
-           {step < 3 ? <ArrowRight size={20} /> : t('submit')}
-        </button>
-        <button 
-           className='back-button' onClick={handlePrev} disabled={step <= 0}><ArrowLeft size={20} /></button>
-      </div>
+      <div className="btns-container">
+    <button className="submit-btn" onClick={handleSubmit}>
+      {step < 3 ? <ArrowRight size={20} /> : t("submit")}
+    </button>
+    <button className="back-button" onClick={handlePrev} disabled={step <= 0}>
+      <ArrowLeft size={20} />
+    </button>
+
+    {showStatusPanel && (
+      <div className="Info-Panel">
+      <button className="closeContact-btn" onClick={() => setShowStatusPanel(false)}>x</button>
+      <h1 style={{ color: "lightblue", fontWeight: 700 }}>{t('Post_Created')}</h1>
+      <p style={{ color: "white", fontWeight: 900 }}>{t('Post_Created_Message')}</p>
+    </div>    
+    )}
+  </div>
     </div>
   );
 }

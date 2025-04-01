@@ -7,6 +7,11 @@ import {
 /* Components import */
 import Navbar from './component/Navbar';
 import Footer from './component/Footer';
+import Create from './component/Create';
+import Settings from './pages/Settings';
+import StatsPage from './component/Stats';
+import ProtectedRoute from "./component/ProtectedRoute";
+
 /* Pages import */
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -17,9 +22,8 @@ import LangSelector from './component/LangSelector';
 import Profile from './pages/Profile';
 import NotFoundPage from './pages/NotFoundPage';
 import ConfirmCode from './pages/ConfirmCode';
-import Create from './component/Create';
-import Settings from './pages/Settings';
-import StatsPage from './component/Stats';
+import Admin from './pages/Admin';
+
 
 
 
@@ -49,60 +53,33 @@ const router = createBrowserRouter([
     path: '/',
     element: <Layout />,
     children: [
-      {
-        path: '/',
-        element: <Home />,
-      },
-      {
-        path: 'browse',
-        element: <Browse />,
-      },
-      {
-        path: 'settings',  
-        element: <Settings />,
-      },
-      {
-        path: 'Stats',  
-        element: <StatsPage />,
-      },
+      { path: '/', element: <Home /> },
+      { path: 'browse', element: <Browse /> },
+      { path: 'settings', element: <Settings /> },
+      { path: 'Stats', element: <StatsPage /> },
     ],
   },
   {
     element: <AuthLayout />,
     children: [
+      { path: '/login', element: <Login /> },
+      { path: '/register', element: <Register /> },
+      { path: '/ConfirmCode', element: <ConfirmCode /> },
+      { path: '/profile/:id', element: <Profile /> },
+      { path: 'post/:postID', element: <Product /> },
       {
-        path: '/login',
-        element: <Login />,
-      },
-      {
-        path: '/register',
-        element: <Register />,
-      },
-      {
-        path: '/ConfirmCode',
-        element: <ConfirmCode />,
-      },
-      {
-        path: '/profile/:id',
-        element: <Profile />,
-      },
-      {
-        path: 'post/:postID',
-        element: <Product />,
+        path: "admin",
+        element: (
+          <ProtectedRoute allowedRoles={["0"]}>
+            <Admin />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
-  {
-    path: '/Create',
-    element: <Create />,
-  },
-  
-  {
-    path: '*',
-    element: <NotFoundPage />,
-  },
+  { path: '/Create', element: <Create /> },
+  { path: '*', element: <NotFoundPage /> },
 ]);
-
 
 function App() {
 

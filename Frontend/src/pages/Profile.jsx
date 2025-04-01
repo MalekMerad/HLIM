@@ -25,6 +25,7 @@ function Profile() {
   const [section, setSelectedSection] = useState("create");
   const [editMode, setEditMode] = useState(false);
   const [updatedUser, setUpdatedUser] = useState({});
+  const role = localStorage.getItem("role");
 
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
@@ -37,6 +38,7 @@ function Profile() {
           setUser(data.user);
           setUpdatedUser(data.user);
           console.log(data.user);
+          console.log(role)
         } else {
           console.error(`Error: ${data.error}`);
         }

@@ -485,9 +485,10 @@
     .subscription-container {
         flex-wrap: wrap; 
         justify-content: center;
+        padding: 20px;
     }
 
     .plan-card {
-        max-width: 100%;
+        max-width: 80%;
     }
 }

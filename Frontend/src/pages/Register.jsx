@@ -57,6 +57,9 @@ function Register() {
       return;
     }
 
+    const userRole = 1;
+    const userstatus = 'pending'
+    
     // Create FormData for API request
     setLoading(true);
     const formData = new FormData();
@@ -64,6 +67,8 @@ function Register() {
     formData.append("email", dataForm.email);
     formData.append("password", dataForm.password);
     formData.append("phoneNum", dataForm.phoneNum);
+    formData.append("role", userRole);
+    formData.append("status", userstatus);
     if (selectedFile) {
       formData.append("image", selectedFile);
     }

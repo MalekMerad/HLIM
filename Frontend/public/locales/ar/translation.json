@@ -171,6 +171,27 @@
   "to":"الى",
   "message_error": "عذرًا، حدث خطأ أثناء العملية. يرجى المحاولة مرة أخرى لاحقًا!",
    "notifications_status": "حالة الإشعارات",
-   "message_status": "طلب الارسال"
+   "message_status": "طلب الارسال",
+   "posts_not_available":"المنشورات غير متاحة حاليا",
+    "Favorite_list_header":"قائمة المنشورات المحفوظة",
+    "DashBoard_text": "لوحة التحكم",
+    "Requests_text": "الطلبات",
+    "Request_Summary": "ملخص الطلبات",
+    "Total_text": "الإجمالي",
+    "Approved_text": "الموافق عليها",
+    "Pending_text": "المعلقة",
+    "Rejected_text": "المرفوضة",
+    "Approval_Rejection_Rate": "معدل القبول والرفض",
+    "Requests_Distribution": "توزيع الطلبات",
+    "Requests_per_Day": "الطلبات لكل يوم من الأسبوع",
+    "Requests_per_Month": "الطلبات لكل شهر",
+    "All_Posts": "جميع المنشورات",
+    "Post_Image": "صورة المنشور",
+    "Accept_text": "قبول",
+    "Reject_text": "رفض",
+    "No_Posts": "لم يتم العثور على منشورات.",
+      "Post_Created": "تم إنشاء المنشور",
+  "Post_Created_Message": "شكرًا لمشاركتك على Homora! سيتم مراجعة منشورك.",
+   "SignUpRequest":"قم بالتسجيل حسابك لعرض المنشورات"
   }
   

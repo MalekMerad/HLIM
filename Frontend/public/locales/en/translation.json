@@ -171,6 +171,27 @@
           "to":"to",
            "message_error": "Sorry, an error has occurred during the operation. Please try again later!",
            "notifications_status": "Notifications Status",
-           "message_status": "Message request"
+           "message_status": "Message request",
+           "posts_not_available":"Posts are not available currently",
+            "Favorite_list_header":"Favorite Posts list",
+            "DashBoard_text": "Dashboard",
+            "Requests_text": "Requests",
+            "Request_Summary": "Request Summary",
+  "Total_text": "Total",
+  "Approved_text": "Approved",
+  "Pending_text": "Pending",
+  "Rejected_text": "Rejected",
+  "Approval_Rejection_Rate": "Approval & Rejection Rate",
+  "Requests_Distribution": "Requests Distribution",
+  "Requests_per_Day": "Requests per Day of the Week",
+  "Requests_per_Month": "Requests per Month",
+  "All_Posts": "All Posts",
+  "Post_Image": "Post Image",
+  "Accept_text": "Accept",
+  "Reject_text": "Reject",
+  "No_Posts": "No posts found.",
+    "Post_Created": "Post Has Been Created",
+  "Post_Created_Message": "Thank you for sharing on Homora! Your post will be under review.",
+  "SignUpRequest":"Please sign up / register to view posts"
 }
   

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import '../styles/Favorite.scss';
 
 import { useNavigate , useLocation } from 'react-router-dom';
@@ -9,6 +10,8 @@ export default function Favorite() {
   const token = localStorage.getItem("token");
 
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+
   useEffect(() => {
     const fetchProfileFetch = async () => {
       try {
@@ -22,10 +25,6 @@ export default function Favorite() {
   
         if (!result.ok) {
           console.log("Fetch error has occurred for favs in profile");
-          return;
-        }
-  
-        if (result.status === 404) {
           setIsFavsEmpty(true);
           return;
         }
@@ -33,7 +32,21 @@ export default function Favorite() {
         const responseData = await result.json();
         console.log("API Response:", responseData);
   
-        setFavPosts(Array.isArray(responseData.data) ? responseData.data : []);
+        // Check if data is an empty array
+        if (!responseData.data || responseData.data.length === 0) {
+          setIsFavsEmpty(true);
+          setFavPosts([]); 
+          console.log("isFavsEmpty:", isFavsEmpty);
+          console.log("favsPosts:", favsPosts);
+
+          return;
+        }
+  
+        setFavPosts(responseData.data);
+        setIsFavsEmpty(false); 
+        console.log("isFavsEmpty:", isFavsEmpty);
+        console.log("favsPosts:", favsPosts);
+
   
       } catch (error) {
         console.log("Fetch Error:", error);
@@ -43,12 +56,13 @@ export default function Favorite() {
     fetchProfileFetch();
   }, [userID, token]);
   
+  
 
   return (
     <div className="favorite-container">
-      <div className="header">My Favorite Listings</div>
+      <div className="header">{t('Favorite_list_header')}</div>
       {isFavsEmpty ? (
-        <div className="empty-message">No favorite properties yet. Start exploring!</div>
+        <div className="empty-message">{t('posts_not_available')}</div>
       ) : (
         <div className="favorite-list">
           {favsPosts.map((post) => (

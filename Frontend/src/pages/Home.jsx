@@ -7,7 +7,8 @@ import { Search } from "lucide-react";
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { fadeIn } from '../variants';
-
+import Lottie from 'lottie-react';
+import homeAnimation from '../assets/Animation - 1742770091651.json'
 function Home() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -23,11 +24,12 @@ function Home() {
 
   const userID = localStorage.getItem("userID");
   const token = localStorage.getItem("token");
-
-  useEffect(()=>{
+  const role = localStorage.getItem("role");
+  useEffect(()=>{ 
     if(userID && token ){
       setIsUserLoggedIn(true);
     }
+    if(role === 0) navigate("/admin");
   },[])
 
   return (
@@ -57,7 +59,7 @@ function Home() {
           viewport={{ once: false, amount: 0.7 }}
           className='img-container-homora'
         >
-          <img src={Homora} alt='Homora Logo' className='img img-logo' />
+          <Lottie animationData={homeAnimation} loop = {true} />
         </motion.div>
 
         <motion.div 
@@ -78,7 +80,6 @@ function Home() {
         </motion.div>
       </div>
 
- {/* Change this to vip section please having three cards one for 0Da/monthly one for 1000Da/monthly */}
  <div className="subscription-section">
       <h2>{t('Subscription_Plans')}</h2>
       <div className="subscription-container">
